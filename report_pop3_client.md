@@ -118,15 +118,27 @@ PyCharm 4.0.4
 Python 2.7.9     
 
 #Тестирование#
-Проверим подключение к серверу, исполнение всех команд (с параметрами и без), ввод неверных команд, исполнение команд с неверными параметрами (несуществующими письмами).   
-Input name of server   
+Проверим подключение к серверу, исполнение всех команд (с параметрами и без):  
+USER  
+PASS    
+LIST    
+RETR  
+DELE    
+TOP   
+UIDL  
+RSET   
+QUIT 
+
+Проверим также ввод неверных команд, исполнение команд с неверными параметрами(несуществующими письмами).   
+
+**Input name of server  
 pop.yandex.ru  
 Input port   
-995   
+995**  
 << +OK POP Ya! na@11 mIed3u1L1W2h
 
-Input username    
-denispopclient1994@yandex.ru
+**Input username    
+denispopclient1994@yandex.ru**
 
 << +OK password, please.
 
@@ -135,32 +147,32 @@ denis11021994
 
 << +OK 2 22089
 
-Input command    
-stat   
+**Input command    
+stat**   
 
 << +OK 2 22089
 
-Input command   
+**Input command   
 list   
 Input num
-1
+1**
 
 << +OK 1 10477
 
-Input command  
-list 2
+**Input command  
+list 2**
 
 
 << +OK 2 11612
 
-Input command   
+**Input command   
 top   
 Input number of msg   
 1  
 Input number of strings  
-10   
+10**   
 
-<< +OK 10477 octets.
+<< +OK 10477 octets.  
 X-Yandex-FolderName: Vhodyashchie
 Content-Type: multipart/related; boundary="===============1696383123=="
 MIME-Version: 1.0
@@ -181,8 +193,8 @@ aHRtbDsgY2hhcnNldD1VVEYtOCI+Cjx0aXRsZT7QodC+0LHQtdGA0LjRgtC1INC/0LjRgdGM0LzQ
 sCDQuNC3INC00YDRg9Cz0LjRhSDQv9C+0YfRgtC+0LLRi9GFINGP0YnQuNC60L7QsiDQsiDQr9C9
 .
 
-Input command  
-top 1 10  
+**Input command  
+top 1 10**  
 
 
 << +OK 10477 octets.  
@@ -206,20 +218,20 @@ aHRtbDsgY2hhcnNldD1VVEYtOCI+Cjx0aXRsZT7QodC+0LHQtdGA0LjRgtC1INC/0LjRgdGM0LzQ
 sCDQuNC3INC00YDRg9Cz0LjRhSDQv9C+0YfRgtC+0LLRi9GFINGP0YnQuNC60L7QsiDQsiDQr9C9
 .
 
-Input command  
+**Input command  
 uidl  
 Input number of msg  
-1  
+1**  
 
 << +OK 1 c115536a552aee89e0406c5f16fd716c
 
-Input command  
-uidl 2  
+**Input command  
+uidl 2**  
 
 << +OK 2 a92a82c5fe08b1b032b69906c2b7b19a
 
-Input command  
-retr 1  
+**Input command  
+retr 1**  
 
 << +OK 10477 octets.  
 X-Yandex-FolderName: Vhodyashchie
@@ -240,33 +252,34 @@ BQAUAFABQAUAFAH/2Q==
 --===============1696383123==--
 .  
 
-Input command  
-dele 2 
+**Input command  
+dele 2** 
     
 << +OK 1 10477
 
-Input command
-stat  
+**Input command  
+stat**  
 
 << +OK 1 10477
 
-Input command  
-rset
+**Input command  
+rset**
 
 
 << +OK 2 22089
 
-Input command    
-avasd        
+**Input command    
+avasd**
+        
 Wrong command  
 
-Input command   
-list 3   
+**Input command   
+list 3**   
   
 << -ERR message does not exist or deleted  
 
-Input command  
-quit  
+**Input command  
+quit** 
 
 << +OK shutting down.  
 
