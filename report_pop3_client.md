@@ -37,11 +37,21 @@
 3)  Имя пользователя   
 4)  Пароль пользователя  
 
-**Накладываемые ограничения**
 
 
 
 #Архитектура приложения#
+В приложении имеется класс POP3Client, который взаимодействует с сервером и реализует команды протокола POP3.
+В этом классе реализованы следующие методы:   
+• send() - посылает команды серверу   
+• recv() - получает ответ от сервера   
+• recv2() - получает ответ от сервера для команд retr и top   
+• command() - отправляет команды серверу и получает ответ, проверяет что ответ "OK"     
+• connect_to_serv() - подключается к серверу, метод аутентификации  
+• stat(), list(), top(), uidl(), retr(), retr(), dele(), rset(), quit()  - реализуют одноименные команды  
+• par_ list(), par_ top(), par_ uidl(), par_ retr() , par_dele() - отвечают за  ввод недостающих параметров для соответсвующих  команд.   
+
+
 
 **Описание работы протокола**   
 Сервер прослушивает TCP соединение на порту 995. Когда клиент желает воспользоваться сервисом POP3, он должен установить соединение с сервером.  Клиент и POP3 сервер обмениваются командами и ответами до тех пор, пока соединение не будет закрыто или прервано.
@@ -52,14 +62,17 @@
 POP3 сессия состоит из нескольких стадий. После установки TCP соединения, сервер посылает приветствие, и сессия переходит в состояние AUTHORIZATION. На этом этапе клиент должен идентифицировать себя на сервере. После успешной идентификации сессия переходит в состояние TRANSACTION. В этой стадии клиент запрашивает выполнение команд на сервере. Когда клиент посылает команду QUIT, сессия переходит в состояние UPDATE. На этом этапе POP3 сервер освобождает все ресурсы, занятые в стадии TRANSACTION и заканчивает работу. TCP соединение после этого закрывается.
 
 **Дизайн протокола**  
+Логирование:   
 После запуска приложения клиенту требуется ввести имя сервера и порта:   
 Input name of server    
 Input port   
 После чего предлагается ввести логин и пароль:   
 Input username   
 Input password   
-При успешной аутентификации, устанавливается соединение между клиентом и сервером. Клиент может вводить команды согласно протоколу:
-Input command    
+При успешной аутентификации, устанавливается соединение между клиентом и сервером. 
+
+Клиент может вводить команды согласно протоколу:   
+Input command      
 Если пользователь не указал параметры команды, то ниже ему предлагается их ввести:   
 Input num   
 Input number of strings    
@@ -100,7 +113,7 @@ Input number of strings
 	Эта команда отправляется без аргументов и всегда имеет единственный ответ «+ОК».</td>
 </table>
 
-#Описание среды разработки#
+#Среда разработки#
 PyCharm 4.0.4    
 Python 2.7.9     
 
@@ -112,45 +125,40 @@ Input port
 995   
 << +OK POP Ya! na@11 mIed3u1L1W2h
 
-Input username
+Input username    
 denispopclient1994@yandex.ru
->> USER denispopclient1994@yandex.ru
 
 << +OK password, please.
 
-Input password
-denis11021994
->> PASS denis11021994
+Input password:                                         
+denis11021994   
 
 << +OK 2 22089
 
-Input command
-stat
->> STAT
+Input command    
+stat   
 
 << +OK 2 22089
 
-Input command
-list
+Input command   
+list   
 Input num
 1
->> LIST 1
 
 << +OK 1 10477
 
-Input command
+Input command  
 list 2
->> LIST 2
+
 
 << +OK 2 11612
 
-Input command
-top
-Input number of msg
-1
-Input number of strings
-10
->> TOP 1 10
+Input command   
+top   
+Input number of msg   
+1  
+Input number of strings  
+10   
 
 << +OK 10477 octets.
 X-Yandex-FolderName: Vhodyashchie
@@ -173,11 +181,11 @@ aHRtbDsgY2hhcnNldD1VVEYtOCI+Cjx0aXRsZT7QodC+0LHQtdGA0LjRgtC1INC/0LjRgdGM0LzQ
 sCDQuNC3INC00YDRg9Cz0LjRhSDQv9C+0YfRgtC+0LLRi9GFINGP0YnQuNC60L7QsiDQsiDQr9C9
 .
 
-Input command
-top 1 10
->> TOP 1 10
+Input command  
+top 1 10  
 
-<< +OK 10477 octets.
+
+<< +OK 10477 octets.  
 X-Yandex-FolderName: Vhodyashchie
 Content-Type: multipart/related; boundary="===============1696383123=="
 MIME-Version: 1.0
@@ -198,25 +206,22 @@ aHRtbDsgY2hhcnNldD1VVEYtOCI+Cjx0aXRsZT7QodC+0LHQtdGA0LjRgtC1INC/0LjRgdGM0LzQ
 sCDQuNC3INC00YDRg9Cz0LjRhSDQv9C+0YfRgtC+0LLRi9GFINGP0YnQuNC60L7QsiDQsiDQr9C9
 .
 
-Input command
-uidl
-Input number of msg
-1
->> UIDL 1
+Input command  
+uidl  
+Input number of msg  
+1  
 
 << +OK 1 c115536a552aee89e0406c5f16fd716c
 
-Input command
-uidl 2
->> UIDL 2
+Input command  
+uidl 2  
 
 << +OK 2 a92a82c5fe08b1b032b69906c2b7b19a
 
-Input command
-retr 1
->> RETR 1
+Input command  
+retr 1  
 
-<< +OK 10477 octets.
+<< +OK 10477 octets.  
 X-Yandex-FolderName: Vhodyashchie
 Content-Type: multipart/related; boundary="===============1696383123=="
 MIME-Version: 1.0
@@ -233,42 +238,40 @@ Content-Transfer-Encoding: base64
 tTfFRWbDtdVXMJyiGHuKalWhUxPNpXrbg40qet1umGFABQAUAFAGD0UAZoAONABQAUAFABQAUAFA
 BQAUAFABQAUAFAH/2Q==
 --===============1696383123==--
+.  
 
-.
-Input command
-dele 2
->> DELE 2
-
-stat
+Input command  
+dele 2 
+    
 << +OK 1 10477
 
 Input command
->> STAT
+stat  
 
 << +OK 1 10477
 
-Input command
+Input command  
 rset
->> RSET
+
 
 << +OK 2 22089
 
-Input command avasd    
-Wrong command
+Input command    
+avasd        
+Wrong command  
 
-Input command
+Input command   
 list 3   
->> LIST 3   
+  
 << -ERR message does not exist or deleted  
 
-Input command
-quit
->> QUIT
+Input command  
+quit  
 
-<< +OK shutting down.
+<< +OK shutting down.  
 
-
-#Листринги#
+Также, для данного приложения были написаны unit-тесты. Итоговое тестовое покрытие составляет 56%. Тесты приведены в приложении №2.
+#Приложение 1. Текст программы#
 
 	__author__ = 'Denis'
 	
@@ -447,3 +450,88 @@ quit
 
 	if __name__ == "__main__":
 	main()
+
+#Приложение 2. Unit-тесты #
+	import io
+	from nose.tools import raises
+	from main import POP3Client
+	
+	__author__ = 'Denis'
+	
+	import socket
+	import unittest
+	
+	class testPop3(unittest.TestCase):
+    def setUp(self):
+        self.login = 'denispopclient1994@yandex.ru'
+        self.passwd = 'denis11021994'
+        self.serv = 'pop.yandex.ru'
+        self.port = '995'
+        self.client = POP3Client(self.serv, int(self.port))
+        self.client.connect_to_serv()
+        self.client.user(self.login)
+        self.client.passwd(self.passwd)
+
+
+    def test_dele(self):
+        tmp1 = self.client.stat()
+        parse1=tmp1.split(' ')[1]
+        self.client.dele(1)
+        self.client.quit()
+        print('1 dele: %s' % str(parse1))
+        self.client = POP3Client(self.serv, int(self.port))
+        self.client.connect_to_serv()
+        self.client.user(self.login)
+        self.client.passwd(self.passwd)
+        tmp2 = self.client.stat()
+        parse2=tmp2.split(' ')[1]
+        print('2 dele: %s' % str(parse2))
+        self.assertLess(parse2, parse1)
+
+    def test_rset(self):
+        tmp1 = self.client.stat()
+        parse1=tmp1.split(' ')[1]
+        self.client.dele(1)
+        self.client.rset()
+        self.client.quit()
+        self.client = POP3Client(self.serv, int(self.port))
+        self.client.connect_to_serv()
+        self.client.user(self.login)
+        self.client.passwd(self.passwd)
+        tmp2 = self.client.stat()
+        parse2=tmp2.split(' ')[1]
+        self.assertEqual(parse2, parse1)
+
+    @raises(IOError)
+    def test_close(self):
+        self.client = POP3Client(self.serv, int(self.port))
+        self.client.connect_to_serv()
+        self.client.user(self.login)
+        self.client.sock.close()
+        self.client.passwd(self.passwd)
+
+    @raises(IOError)
+    def test_close2(self):
+        self.client = POP3Client(self.serv, int(self.port))
+        self.client.connect_to_serv()
+        self.client.user(self.login)
+        self.client.passwd(self.passwd)
+        self.client.sock.close()
+        self.client.retr(1)
+
+
+    def test_topic(self):
+        #str = open('letter.txt').read()
+        str = self.client.retr(1)
+        topics = ['From', 'To','Date']
+        new = str.partition('\r\n\r\n')[0]
+        lines = new.splitlines()
+        keys = [x.partition(':')[0].strip() for x in lines]
+        if set(topics).issubset(set(keys)):
+            print('OK')
+        else:
+            print('Error')
+            raise Exception
+
+	if __name__ == '__main__':
+    unittest.main()
